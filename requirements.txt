@@ -1,0 +1,8 @@
+streamlit
+crewai
+crewai-tools
+python-dotenv
+selenium
+requests
+beautifulsoup4
+pyyaml
