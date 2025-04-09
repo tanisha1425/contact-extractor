@@ -1,0 +1,43 @@
+---
+search_task:
+  description: Conduct comprehensive web searches for “{company_name} HR contact information”
+    and related queries (e.g., “{company_name} recruiter phone number,” “{company_name}
+    talent acquisition team”) to identify URLs of relevant pages. Prioritize sources
+    such as the company’s official website, LinkedIn profiles, team/contact/about
+    pages, Twitter bios, Facebook business pages, and public directories. Collect
+    and return a list of URLs that are likely to contain contact information for recruiters,
+    HR personnel, or talent acquisition team members.
+  expected_output: A list of URLs containing potential HR contact information for
+    {company_name}.
+  async_execution: false
+  agent: search_agent
+scrape_task:
+  description: Extract contact details such as phone numbers, names, and job titles
+    from the identified URLs for {company_name}. Implement request delays to respect
+    rate limits.
+  expected_output: A list of extracted contact details, prioritizing phone numbers,
+    for {company_name}.
+  async_execution: false
+  agent: scrape_agent
+  context:
+  - search_task
+validate_task:
+  description: Validate the extracted contact information by checking the source reliability
+    and completeness of data for {company_name}. Assign confidence scores based on
+    criteria such as source type.
+  expected_output: Validated contact information with assigned confidence scores for
+    {company_name}.
+  async_execution: false
+  agent: validation_agent
+  context:
+  - scrape_task
+compile_task:
+  description: Compile the validated contact information into a CSV file with columns
+    for Company Name, Recruiter Name, Job Title, Phone Number, Source Name, and Confidence
+    Score for {company_name}.
+  expected_output: A structured CSV file containing the validated contact information
+    for {company_name}.
+  async_execution: false
+  agent: compilation_agent
+  context:
+  - validate_task
